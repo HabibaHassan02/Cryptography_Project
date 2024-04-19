@@ -1,5 +1,3 @@
-import math
-
 #function to check if the number is prime or not
 def is_prime(num):
     if num<= 1:
