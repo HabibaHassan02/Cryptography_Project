@@ -24,11 +24,11 @@ def is_primitive(a,p):
 #implement Diffie-Hellman algorithm with q (prime number) and a(its primitive root) which are public and xa and xb as private keys
 #of every user are entered as inputs
 #and calculate the shared key between the users
-def DH(q,a,x1,x2):
-    y1 = (a**x1) % q
-    y2 = (a**x2) % q
-    k1 = (y2**x1) % q
-    k2 = (y1 ** x2) % q
+def DH(q,a,xa,xb):
+    y1 = (a**xa) % q
+    y2 = (a**xb) % q
+    k1 = (y2**xa) % q
+    k2 = (y1 ** xb) % q
 
     if k1==k2:
         print("keys are shared correctly")
@@ -51,11 +51,11 @@ while True:
     break
 
 while True:
-    x1= int(input("enter x1 which is the private key of user1: "))
-    x2= int(input("enter x2 which is the private key of user2: "))
-    if x1>q or x2>q:
+    xa= int(input("enter xa which is the private key of user1: "))
+    xb= int(input("enter xb which is the private key of user2: "))
+    if xa>q or xb>q:
         print(f"Error! Please enter private keys less than the entered prime number {q}") 
         continue
     break
 
-DH(q,a,x1,x2)
+DH(q,a,xa,xb)
