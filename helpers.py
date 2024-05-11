@@ -38,5 +38,5 @@ def encrypt_aes(data, key):
 def decrypt_aes(cipher_text, key,iv):
     decrypt_cipher = AES.new(key, AES.MODE_CBC, iv)
     plain_text = decrypt_cipher.decrypt(cipher_text)
-    plain_text = unpad(plain_text, AES.block_size,"pkcs7")     
+    plain_text = unpad(plain_text, AES.block_size)     
     return plain_text

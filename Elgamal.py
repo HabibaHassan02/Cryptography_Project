@@ -45,8 +45,8 @@ def elgamalEncryption(M: int, alpha:int, X_a:int, q:int, k:int):
         binary_rep =  bin(m)[2:]
         m = int(binary_rep[lst_bits:],2)
 
-    K_inverse = extended_ecludian(q-1,q-1,k,1,0,0,1)
-    #K_inverse = pow(k,-1,q-1)
+    # K_inverse = extended_ecludian(q-1,q-1,k,1,0,0,1)
+    K_inverse = pow(k,-1,q-1)
     C2 = K_inverse * ((m - X_a*C1)% (q-1))
     return C1, C2 % (q-1)
 
