@@ -1,6 +1,5 @@
 # Open the file in binary mode
 with open('C:/Users/Habiba ElHussieny/Downloads/Computer Security/Project/Cryptography_Project/CTF/CTF-4 (Bit Shifting)/bits.txt', 'rb') as f:
-    # Read the entire file as binary data
     binary_data = f.read()
 
 # Convert binary data to a string of 0s and 1s
