@@ -1,11 +1,15 @@
 import random
 from math import floor
-
+import hashlib
+from helpers import gcd
 def extended_ecludian (phy,r0:int,r1:int,x0:int,x1:int,y0:int,y1:int):
     
-    if r1 == 1:
+    if r1 == 1 :
         return r1
-    
+    # print("r1 = ", r1)
+    if r1 == 0 :
+        return y0 % phy
+   
     r = r0 % r1
     q = floor(r0/r1)
     x = x0 - q * x1 
@@ -19,27 +23,46 @@ def extended_ecludian (phy,r0:int,r1:int,x0:int,x1:int,y0:int,y1:int):
 def elgamalgeneration( q: int, alpha: int):
 
     X_a = random.randint(2, q - 2)
-    y_a = (alpha ** X_a) % q
-
-    k = random.randint(1, q - 1)
-    K = (y_a ** k) % q
+    y_a = pow(alpha , X_a) % q
 
     return y_a , X_a
-def generateKey (q: int,Y_b_gamal):
+
+def generateKey (q: int):
     k = random.randint(1, q - 1)
-    K = (Y_b_gamal ** k) % q
-    return k,K
+    while (gcd(k,q-1) != 1 ):
+        k = random.randint(1, q - 1)
+    return k
 
-def elgamalEncryption(M: int, alpha:int, X_a:int, q:int, k:int, K:int):
+def elgamalEncryption(M: int, alpha:int, X_a:int, q:int, k:int):
     
-    C1 = (alpha ** k) % q
-    C2 = (K * M) % q 
+    C1 = pow(alpha, k) % q
+    sha1_hash = hashlib.sha1()
+    sha1_hash.update(str(M).encode())
+    hash_hex = sha1_hash.hexdigest()
+    m =  int(hash_hex,16)
+    lst_bits = 1
+    while(m >= q-1):
+        binary_rep =  bin(m)[2:]
+        m = int(binary_rep[lst_bits:],2)
 
+    # K_inverse = extended_ecludian(q-1,q-1,k,1,0,0,1)
+    K_inverse = pow(k,-1,q-1)
+    C2 = K_inverse * ((m - X_a*C1)% (q-1))
     return C1, C2
 
-def elgamalDecryption(C1: int, C2: int, q: int, X_a: int):
-    K = (C1 ** X_a) % q
-    K_inverse = extended_ecludian(q,q,K,1,0,0,1)
-    M = (C2 * K_inverse) % q
-    return M
+def elgamalDecryption(y_b,C1: int, C2: int, q: int,a):
+    sha1_hash = hashlib.sha1()
+    sha1_hash.update(str(y_b).encode())
+    hash_hex = sha1_hash.hexdigest()
+    m =  int(hash_hex,16)
+    lst_bits = 1
+    while(m >= q-1):
+        binary_rep =  bin(m)[2:]
+        m = int(binary_rep[lst_bits:],2)
+
+    v1 = (pow(y_b,C1) * pow(C1,C2)) % q
+    v2 = pow(a , m) % q
+    print("v1 =" ,v1)
+    print("v2 = ", v2)
+    return v1,v2
 
