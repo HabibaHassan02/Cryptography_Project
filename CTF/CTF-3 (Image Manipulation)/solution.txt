@@ -1,0 +1,35 @@
+Approaches:
+===========
+
+First: tried alot of online steghide tools
+Second:  tried zsteg command  ==> zsteg first.png  & zsteg second.png
+
+imagedata           .. file: Tower/XP rel 2 object
+b1,r,lsb,xy         .. text: "Kk~s$MK\nPU"
+b1,bgr,msb,xy       .. text: "?\\+K.6(."
+b2,g,msb,xy         .. text: "e%\n-i^O*;)"
+b2,b,msb,xy         .. text: "-NV\\k(2\""
+b4,g,lsb,xy         .. text: "i_|KfmbJM$"
+b4,g,msb,xy         .. text: "q^\ni.D=\\\\/\n"
+b4,bgr,msb,xy       .. text: "}ze@\n0%Cu@"
+
+imagedata           .. text: "i|dUXst(\\"
+b1,g,msb,xy         .. text: "C?ac&v3(b?"
+b2,g,msb,xy         .. text: "g,Y b6GD)"
+b3,rgb,lsb,xy       .. text: "s2!%rAM4g"
+b4,g,msb,xy         .. text: "w2::ZH,nSPB"
+b4,b,msb,xy         .. file: OpenPGP Secret Key
+
+I tried to look into PGP: zsteg -e b4,b,msb,xy second.png > secret_key.asc
+and then gpg --import secret_key.asc but reached nothing 
+
+But none of the above approaches worked
+
+
+Then i tried to just add the 2 images together using a simple python file in ctf3.ipynb
+
+
+Flag:
+=========
+
+picoCFT{d72ea4af}
