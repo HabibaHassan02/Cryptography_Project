@@ -5,6 +5,28 @@ from DH import DH
 from Elgamal import elgamalEncryption,elgamalgeneration,generateKey,elgamalEncryption, elgamalDecryption
 import hashlib
 from helpers import encrypt_aes, decrypt_aes
+import aioconsole
+
+
+async def client_send(websocket, key):
+    while True:
+        data  = await aioconsole.ainput("")
+        #encryption of the message before sending i using AES encryption algorthim
+        data_encrypted,iv = encrypt_aes (data,key)
+
+        #sending the message encrypted
+        await websocket.send(data_encrypted) 
+        #sending the iv
+        await websocket.send(iv)
+
+
+async def client_recieve(websocket, key):
+    while True:
+        data_rec = await websocket.recv()
+        iv = await websocket.recv()
+        print("Message recived from my opponent before decryption = ", data_rec)
+        message_recived=decrypt_aes (data_rec,key,iv)
+        print("Message recived from my opponent after decryption = ", message_recived)
 
 async def hello():
     file_path = 'public.txt'
@@ -37,7 +59,7 @@ async def hello():
     async with websockets.connect("ws://localhost:8765") as websocket:
             
             #Generatig keys using ElGamal 
-            await websocket.send("initilization")
+            # await websocket.send("initilization")
             y_b_g = await websocket.recv()
             y_a_g , X_a_g = elgamalgeneration(q_g, a_g)
             print("public key of ElGamal = ",X_a_g)
@@ -85,22 +107,23 @@ async def hello():
             key = bytes.fromhex(hash_hex)
             print("Aes Key after hashing = ",key)
     
-            while True:
-                data  = input()
-                #encryption of the message before sending i using AES encryption algorthim
-                data_encrypted,iv = encrypt_aes (data,key)
+            # while True:
+            #     data  = input()
+            #     #encryption of the message before sending i using AES encryption algorthim
+            #     data_encrypted,iv = encrypt_aes (data,key)
 
-                #sending the message encrypted
-                await websocket.send(data_encrypted) 
-                #sending the iv
-                await websocket.send(iv)
+            #     #sending the message encrypted
+            #     await websocket.send(data_encrypted) 
+            #     #sending the iv
+            #     await websocket.send(iv)
 
-                data_rec = await websocket.recv()
-                iv = await websocket.recv()
-                print("Message recived from my opponent before decryption = ", data_rec)
-                message_recived=decrypt_aes (data_rec,key,iv)
-                print("Message recived from my opponent after decryption = ", message_recived)
-                await asyncio.sleep(5)
+            #     data_rec = await websocket.recv()
+            #     iv = await websocket.recv()
+            #     print("Message recived from my opponent before decryption = ", data_rec)
+            #     message_recived=decrypt_aes (data_rec,key,iv)
+            #     print("Message recived from my opponent after decryption = ", message_recived)
+            await asyncio.gather(asyncio.create_task(client_send(key, websocket)), asyncio.create_task(client_recieve(key, websocket)))
+                # await asyncio.sleep(5)
 
 
         
