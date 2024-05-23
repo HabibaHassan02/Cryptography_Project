@@ -1,4 +1,9 @@
-# Cryptography_Project
+### Cryptography_Project
+
+## This is a simulation of an encrypted chatting app using Diffie-Hellman and ElGamal Digital Signatures algorithms, AES and hash functions.
+## chatting is run through terminal
+
+## To start chatting:
 
 # pip install requirements.txt
 # write in the terminal python generateConstants.py if you want to generate new alpha and q , will be written in ublic.txt 
